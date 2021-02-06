@@ -1,0 +1,22 @@
+{
+  "name": "comic-quotes",
+  "version": "1.0.0",
+  "description": "undefined",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NakshatraCodes/comic-quotes.git"
+  },
+  "author": "Nakshatra Saxena",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NakshatraCodes/comic-quotes/issues"
+  },
+  "homepage": "https://github.com/NakshatraCodes/comic-quotes#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
