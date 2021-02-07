@@ -7,6 +7,8 @@ Router.get("/", (req, res, next) => {
   res.json({ msg: "Youve hit Whatsup" });
 });
 
+// Method: POST
+// Create a new Quote in the DB
 Router.post("/quote", async (req, res, next) => {
   const { character, quote, quoteID } = req.body;
   try {
