@@ -3,7 +3,9 @@ const Router = express.Router();
 const mongoose = require("mongoose");
 const Quote = mongoose.model("quotes");
 
-Router.get("/", (req, res, next) => {
+Router.get("/quote", (req, res, next) => {
+  const { comic } = req.query;
+  // TODO: fetch random quotes with "comic"
   res.json({ msg: "Youve hit Whatsup" });
 });
 
