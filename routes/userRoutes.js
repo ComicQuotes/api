@@ -10,7 +10,7 @@ Router.post("/register", async (req, res, next) => {
     return res.json({ msg: "Please provide an Email" });
   }
   try {
-    let newUser = await new User({ email, key: nanoid(5) }).save();
+    let newUser = await new User({ email, key: nanoid(5), hitCount: 0 }).save();
     console.log(`From the DB: ${newUser}`);
     return res.json(newUser);
   } catch (err) {

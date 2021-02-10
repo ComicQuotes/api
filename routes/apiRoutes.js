@@ -2,64 +2,74 @@ const express = require("express");
 const Router = express.Router();
 const mongoose = require("mongoose");
 const Quote = mongoose.model("quotes");
+const User = mongoose.model("users");
 const seedData = require("../seedData");
-const { isEmpty } = require("../helpers/helper");
+const { isEmpty, checkAPIKey } = require("../helpers/helper");
 
 Quote.createIndexes({ quoteID: 1 });
+User.createIndexes({ key: 1 });
 
-Router.get("/quote", async (req, res, next) => {
+Router.get("/:key/quote", async (req, res, next) => {
   const { comic, num } = req.query;
-
-  if (isEmpty(req.query)) {
-    // Query is empty, return 1 random quote
-    Quote.aggregate([
-      { $sample: { size: 1 } }, // You want to get 1 doc
-    ]).exec((err, results) => {
-      next(err);
-      return res.json(results[0]);
-    });
-  } else if (!comic && num) {
-    //  Query has num, return "num" number of random quotes
-    Quote.aggregate([
-      { $sample: { size: parseInt(num, 10) } }, // You want to get num docs
-    ]).exec((err, results) => {
-      next(err);
-      return res.json(results);
-    });
-  } else if (!num && comic) {
-    // Query has comic, return 1 quote from "comic"
-    Quote.aggregate([
-      { $match: { comic } }, // filter the results
-      { $sample: { size: 1 } },
-    ]).exec((err, results) => {
-      next(err);
-      return res.json(results);
-    });
-  } else if (comic && num) {
-    // Query has both, num and comic, return "num" number of "comic" quotes
-    Quote.aggregate([
-      { $match: { comic } }, // filter the results
-      { $sample: { size: parseInt(num, 10) } },
-    ]).exec((err, results) => {
-      next(err);
-      return res.json(results);
-    });
+  const key = req.params.key;
+  if (await checkAPIKey(key)) {
+    if (isEmpty(req.query)) {
+      // Query is empty, return 1 random quote
+      Quote.aggregate([
+        { $sample: { size: 1 } }, // You want to get 1 doc
+      ]).exec((err, results) => {
+        next(err);
+        return res.json(results[0]);
+      });
+    } else if (!comic && num) {
+      //  Query has num, return "num" number of random quotes
+      Quote.aggregate([
+        { $sample: { size: parseInt(num, 10) } }, // You want to get num docs
+      ]).exec((err, results) => {
+        next(err);
+        return res.json(results);
+      });
+    } else if (!num && comic) {
+      // Query has comic, return 1 quote from "comic"
+      Quote.aggregate([
+        { $match: { comic } }, // filter the results
+        { $sample: { size: 1 } },
+      ]).exec((err, results) => {
+        next(err);
+        return res.json(results);
+      });
+    } else if (comic && num) {
+      // Query has both, num and comic, return "num" number of "comic" quotes
+      Quote.aggregate([
+        { $match: { comic } }, // filter the results
+        { $sample: { size: parseInt(num, 10) } },
+      ]).exec((err, results) => {
+        next(err);
+        return res.json(results);
+      });
+    } else {
+      res.json({ error: "Not a Valid Request" });
+    }
   } else {
-    res.json({ msg: "Error" });
+    return res.json({ error: "Invalid API Key" });
   }
 });
 
-Router.get("/quote/:id", async (req, res, next) => {
-  // TODO: Return quote with quoteID: req.params.id
-  console.log(req.params.id);
-  const quoteID = parseInt(req.params.id, 10);
-  try {
-    const quote = await Quote.findOne({ quoteID });
-    console.log(quote);
-    return res.json(quote);
-  } catch (e) {
-    console.log(e);
-    next(e);
+Router.get("/:key/quote/:id", async (req, res, next) => {
+  const key = req.params.key;
+  if (await checkAPIKey(key)) {
+    // TODO: Return quote with quoteID: req.params.id
+    const quoteID = parseInt(req.params.id, 10);
+    try {
+      const quote = await Quote.findOne({ quoteID });
+      // console.log(quote);
+      return res.json(quote);
+    } catch (e) {
+      console.log(e);
+      next(e);
+    }
+  } else {
+    return res.json({ error: "Invalid API Key" });
   }
 });
 
