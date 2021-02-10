@@ -24,6 +24,7 @@ mongoose.connect(
 
 app.use(express.json());
 
+app.use("/", docsRoutes);
 app.use("/api", apiRoutes);
 
 app.use((error, req, res, next) => {

@@ -5,6 +5,8 @@ const Quote = mongoose.model("quotes");
 const seedData = require("../seedData");
 const { isEmpty } = require("../helpers/helper");
 
+Quote.createIndexes({ quoteID: 1 });
+
 Router.get("/quote", async (req, res, next) => {
   const { comic, num } = req.query;
 
@@ -14,7 +16,7 @@ Router.get("/quote", async (req, res, next) => {
       { $sample: { size: 1 } }, // You want to get 1 doc
     ]).exec((err, results) => {
       next(err);
-      return res.json(results);
+      return res.json(results[0]);
     });
   } else if (!comic && num) {
     //  Query has num, return "num" number of random quotes
@@ -49,6 +51,16 @@ Router.get("/quote", async (req, res, next) => {
 
 Router.get("/quote/:id", async (req, res, next) => {
   // TODO: Return quote with quoteID: req.params.id
+  console.log(req.params.id);
+  const quoteID = parseInt(req.params.id, 10);
+  try {
+    const quote = await Quote.findOne({ quoteID });
+    console.log(quote);
+    return res.json(quote);
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
 });
 
 // Method: POST
