@@ -2,11 +2,53 @@ const express = require("express");
 const Router = express.Router();
 const mongoose = require("mongoose");
 const Quote = mongoose.model("quotes");
+const seedData = require("../seedData");
+const { isEmpty } = require("../helpers/helper");
 
-Router.get("/quote", (req, res, next) => {
-  const { comic } = req.query;
-  // TODO: fetch random quotes with "comic"
-  res.json({ msg: "Youve hit Whatsup" });
+Router.get("/quote", async (req, res, next) => {
+  const { comic, num } = req.query;
+
+  if (isEmpty(req.query)) {
+    // Query is empty, return 1 random quote
+    Quote.aggregate([
+      { $sample: { size: 1 } }, // You want to get 1 doc
+    ]).exec((err, results) => {
+      next(err);
+      return res.json(results);
+    });
+  } else if (!comic && num) {
+    //  Query has num, return "num" number of random quotes
+    Quote.aggregate([
+      { $sample: { size: parseInt(num, 10) } }, // You want to get num docs
+    ]).exec((err, results) => {
+      next(err);
+      return res.json(results);
+    });
+  } else if (!num && comic) {
+    // Query has comic, return 1 quote from "comic"
+    Quote.aggregate([
+      { $match: { comic } }, // filter the results
+      { $sample: { size: 1 } },
+    ]).exec((err, results) => {
+      next(err);
+      return res.json(results);
+    });
+  } else if (comic && num) {
+    // Query has both, num and comic, return "num" number of "comic" quotes
+    Quote.aggregate([
+      { $match: { comic } }, // filter the results
+      { $sample: { size: parseInt(num, 10) } },
+    ]).exec((err, results) => {
+      next(err);
+      return res.json(results);
+    });
+  } else {
+    res.json({ msg: "Error" });
+  }
+});
+
+Router.get("/quote/:id", async (req, res, next) => {
+  // TODO: Return quote with quoteID: req.params.id
 });
 
 // Method: POST
@@ -21,6 +63,24 @@ Router.post("/quote", async (req, res, next) => {
     console.log(err.message);
     next(err);
   }
+});
+
+Router.get("/seed", async (req, res, next) => {
+  seedData.forEach(async ({ comic, quote, author }, index) => {
+    try {
+      let newQuote = await new Quote({
+        comic,
+        quote,
+        quoteID: index,
+        author,
+      }).save();
+      console.log(`From the DB: ${newQuote}`);
+    } catch (err) {
+      console.log(err.message);
+      next(err);
+    }
+  });
+  res.json({ msg: "Seeding Data" });
 });
 
 module.exports = Router;

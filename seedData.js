@@ -1,26 +1,24 @@
 const data = [
   {
     quote: "It’s not who I am underneath, but what I do that defines me.",
-    quoteID: 1,
     comic: "batman",
     author: "Batman",
   },
   {
     quote: "The answers you seek shall be yours, once I claim what’s mine.",
-    quoteID: 2,
     comic: "thor",
     author: "Thor",
   },
   {
     quote:
       "Heroes are made by the path they choose, not the powers they are graced with.",
-    comic: "ironMan",
+    comic: "ironman",
     author: "Iron Man",
   },
   {
     quote:
       "This. This is what I am. This is who I am come hell or high water. If I deny it, I deny everything I’ve ever done. Everything I’ve ever fought for.",
-    comic: "greenArrow",
+    comic: "greenarrow",
     author: "Green Arrow",
   },
   {
@@ -38,7 +36,7 @@ const data = [
   {
     quote:
       "I had my eyes opened. I came to realize that I had more to offer this world than just making things that blow up.",
-    comic: "ironMan",
+    comic: "ironman",
     author: "Iron Man",
   },
   {
@@ -108,36 +106,36 @@ const data = [
   {
     quote:
       "I shouldn’t be alive, unless it was for a reason. I’m not crazy, Pepper. I just finally know what I have to do. And I know in my heart that it’s right.",
-    comic: "ironMan",
+    comic: "ironman",
     author: "Tony Stark",
   },
   {
     quote:
       "It’s an imperfect world, but it’s the only one we got. I guarantee you the day weapons are no longer needed to keep the peace, I’ll start making bricks and beams for baby hospitals.",
-    comic: "ironMan",
+    comic: "ironman",
     author: "Tony Stark",
   },
   {
     quote:
       "They say that the best weapon is the one you never have to fire. I respectfully disagree. I prefer the weapon you only have to fire once.",
-    comic: "ironMan",
+    comic: "ironman",
     author: "Tony Stark",
   },
   {
     quote:
       "I saw young Americans killed by the very weapons I created to defend them and protect them. And I saw that I had become part of a system that is comfortable with zero-accountability.",
-    comic: "ironMan",
+    comic: "ironman",
     author: "Tony Stark",
   },
   {
     quote: "I am Iron Man. The suit and I are one.",
-    comic: "ironMan",
+    comic: "ironman",
     author: "Iron Man",
   },
   {
     quote:
       "My bond is with the people, and I will serve this great nation at the pleasure of myself. If there’s one thing I’ve proven it’s that you can count on me to pleasure myself.",
-    comic: "ironMan",
+    comic: "ironman",
     author: "Tony Stark",
   },
   {
@@ -154,31 +152,31 @@ const data = [
   },
   {
     quote: "Genius, billionaire, playboy, philanthropist.",
-    comic: "ironMan",
+    comic: "ironman",
     author: "Iron Man",
   },
   {
     quote:
       "Everybody wants a happy ending. Right? But it doesn’t always roll that way.",
-    comic: "theAvengers",
+    comic: "theavengers",
     author: "Iron Man",
   },
   {
     quote: "No amount of money ever bought a second of time.",
-    comic: "theAvengers",
+    comic: "theavengers",
     author: "Iron Man",
   },
   {
     quote:
       "It’s not about how much we lost. It’s about how much we have left. We’re the Avengers. We gotta finish this. You trust me?",
-    comic: "theAvengers",
+    comic: "theavengers",
     author: "Iron Man",
   },
   {
     quote: "I love you 3000.",
-    comic: "theAvengers",
+    comic: "theavengers",
     author: "Iron Man",
   },
 ];
 
-console.log(data.length);
+module.exports = data;

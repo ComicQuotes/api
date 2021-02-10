@@ -2,7 +2,11 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const quoteSchema = new Schema({
-  character: {
+  comic: {
+    type: String,
+    required: true,
+  },
+  author: {
     type: String,
     required: true,
   },
