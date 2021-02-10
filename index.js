@@ -5,8 +5,10 @@ const mongoose = require("mongoose");
 const keys = require("./keys");
 
 require("./models/Quotes");
+require("./models/Users");
 
 const apiRoutes = require("./routes/apiRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 mongoose.connect(
   keys.mongoURI,
@@ -24,7 +26,7 @@ mongoose.connect(
 
 app.use(express.json());
 
-app.use("/", docsRoutes);
+app.use("/", userRoutes);
 app.use("/api", apiRoutes);
 
 app.use((error, req, res, next) => {
