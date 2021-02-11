@@ -18,6 +18,7 @@
   "homepage": "https://github.com/NakshatraCodes/comic-quotes#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "express-rate-limit": "^5.2.5",
     "mongoose": "^5.11.15",
     "nanoid": "^3.1.20"
   }
