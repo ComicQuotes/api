@@ -3,15 +3,13 @@ const app = express();
 const mongoose = require("mongoose");
 const rateLimit = require("express-rate-limit");
 
-const keys = require("./keys");
-
 require("./models/Quotes");
 require("./models/Users");
 
 const apiRoutes = require("./routes/apiRoutes");
 const userRoutes = require("./routes/userRoutes");
 
-const MONGO_URI = process.env.MONGO_URI || keys.MONGO_URI;
+const MONGO_URI = process.env.MONGO_URI || require("./keys").MONGO_URI;
 
 // Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 app.set("trust proxy", 1);
