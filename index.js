@@ -11,6 +11,8 @@ require("./models/Users");
 const apiRoutes = require("./routes/apiRoutes");
 const userRoutes = require("./routes/userRoutes");
 
+const MONGO_URI = process.env.MONGO_URI || keys.MONGO_URI;
+
 // Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 app.set("trust proxy", 1);
 
@@ -23,7 +25,7 @@ const apiLimiter = rateLimit({
 });
 
 mongoose.connect(
-  keys.mongoURI,
+  MONGO_URI,
   {
     authSource: "admin",
     useNewUrlParser: true,
