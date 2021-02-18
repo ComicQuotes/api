@@ -43,7 +43,11 @@ app.use("/", userRoutes);
 app.use("/api", apiRoutes);
 
 app.use((error, req, res, next) => {
-  res.json(error);
+  return res.status(500).json(error);
+});
+
+app.use("*", (req, res) => {
+  return res.status(404).json({ msg: "Bad Request", status: res.statusCode });
 });
 
 const PORT = process.env.PORT || 8000;

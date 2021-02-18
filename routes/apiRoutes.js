@@ -18,7 +18,9 @@ Router.get("/:key/quote", checkAPIKey, async (req, res, next) => {
     Quote.aggregate([
       { $sample: { size: 1 } }, // You want to get 1 doc
     ]).exec((err, results) => {
-      next(err);
+      if (err) {
+        return next(err);
+      }
       return res.json(results[0]);
     });
   } else if (!comic && num) {
@@ -26,7 +28,9 @@ Router.get("/:key/quote", checkAPIKey, async (req, res, next) => {
     Quote.aggregate([
       { $sample: { size: parseInt(num, 10) } }, // You want to get num docs
     ]).exec((err, results) => {
-      next(err);
+      if (err) {
+        return next(err);
+      }
       return res.json(results);
     });
   } else if (!num && comic) {
@@ -35,7 +39,9 @@ Router.get("/:key/quote", checkAPIKey, async (req, res, next) => {
       { $match: { comic } }, // filter the results
       { $sample: { size: 1 } },
     ]).exec((err, results) => {
-      next(err);
+      if (err) {
+        return next(err);
+      }
       return res.json(results);
     });
   } else if (comic && num) {
@@ -44,11 +50,13 @@ Router.get("/:key/quote", checkAPIKey, async (req, res, next) => {
       { $match: { comic } }, // filter the results
       { $sample: { size: parseInt(num, 10) } },
     ]).exec((err, results) => {
-      next(err);
+      if (err) {
+        return next(err);
+      }
       return res.json(results);
     });
   } else {
-    res.json({ error: "Not a Valid Request" });
+    return res.json({ error: "Not a Valid Request" });
   }
 });
 
@@ -72,7 +80,7 @@ Router.post("/quote", async (req, res, next) => {
   try {
     let newQuote = await new Quote({ character, quote, quoteID }).save();
     console.log(`From the DB: ${newQuote}`);
-    res.json(newQuote);
+    return res.json(newQuote);
   } catch (err) {
     console.log(err.message);
     next(err);
@@ -94,7 +102,7 @@ Router.get("/seed", async (req, res, next) => {
       next(err);
     }
   });
-  res.json({ msg: "Seeding Data" });
+  return res.json({ msg: "Seeding Data" });
 });
 
 module.exports = Router;
