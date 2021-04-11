@@ -4,12 +4,11 @@ const mongoose = require("mongoose");
 const Quote = mongoose.model("quotes");
 const User = mongoose.model("users");
 
-const seedData = require("../seedData");
+// const seedData = require("../seedData");
 const { isEmpty } = require("../helpers/helper");
 const checkAPIKey = require("../middleware/checkAPIKey");
 
 Quote.createIndexes({ quoteID: 1 });
-User.createIndexes({ key: 1 });
 
 Router.get("/:key/quote", checkAPIKey, async (req, res, next) => {
   const { comic, num } = req.query;
@@ -75,34 +74,36 @@ Router.get("/:key/quote/:id", checkAPIKey, async (req, res, next) => {
 
 // Method: POST
 // Create a new Quote in the DB
-Router.post("/quote", async (req, res, next) => {
-  const { character, quote, quoteID } = req.body;
-  try {
-    let newQuote = await new Quote({ character, quote, quoteID }).save();
-    console.log(`From the DB: ${newQuote}`);
-    return res.json(newQuote);
-  } catch (err) {
-    console.log(err.message);
-    next(err);
-  }
-});
+// Router.post("/quote", async (req, res, next) => {
+//   const { character, quote, quoteID } = req.body;
+//   try {
+//     let newQuote = await new Quote({ character, quote, quoteID }).save();
+//     console.log(`From the DB: ${newQuote}`);
+//     return res.json(newQuote);
+//   } catch (err) {
+//     console.log(err.message);
+//     next(err);
+//   }
+// });
 
-Router.get("/seed", async (req, res, next) => {
-  seedData.forEach(async ({ comic, quote, author }, index) => {
-    try {
-      let newQuote = await new Quote({
-        comic,
-        quote,
-        quoteID: index,
-        author,
-      }).save();
-      console.log(`From the DB: ${newQuote}`);
-    } catch (err) {
-      console.log(err.message);
-      next(err);
-    }
-  });
-  return res.json({ msg: "Seeding Data" });
-});
+// Router.get("/seed", async (req, res, next) => {
+//   seedData.forEach(async ({ comic, quote, author }, index) => {
+//     try {
+//       let newQuote = await new Quote({
+//         comic,
+//         quote,
+//         quoteID: index,
+//         author,
+//       }).save();
+//       console.log(`From the DB: ${newQuote}`);
+//     } catch (err) {
+//       console.log(err.message);
+//       next(err);
+//     }
+//   });
+//   return res.json({ msg: "Seeding Data" });
+// });
 
 module.exports = Router;
+
+// /api/

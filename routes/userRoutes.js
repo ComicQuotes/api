@@ -3,18 +3,25 @@ const Router = express.Router();
 const mongoose = require("mongoose");
 const User = mongoose.model("users");
 const { nanoid } = require("nanoid");
+const { isValidEmail } = require("../helpers/helper");
 
 Router.post("/register", async (req, res, next) => {
   const { email } = req.body;
-  if (!email) {
-    return res.json({ msg: "Please provide an Email" });
+  if (!isValidEmail(email)) {
+    return res.json({
+      status: "error",
+      msg: "Please provide a valid email address",
+    });
   }
   try {
     const foundUser = await User.findOne({ email });
     if (foundUser) {
       return res.json({
-        message:
-          "Email ID is already registered with us. If you have lost your API Key, please contact the developer to retrieve it.",
+        status: "success",
+        msg:
+          "Email ID is already registered with us. We have mailed the API Key on this email.",
+        user: foundUser,
+        email,
       });
     } else {
       try {
@@ -24,7 +31,12 @@ Router.post("/register", async (req, res, next) => {
           hitCount: 0,
         }).save();
         console.log(`From the DB: ${newUser}`);
-        return res.json(newUser);
+        return res.json({
+          status: "success",
+          msg: "Registered, your API key is mailed to you",
+          user: newUser,
+          email,
+        });
       } catch (err) {
         console.log(err.message);
         next(err);
