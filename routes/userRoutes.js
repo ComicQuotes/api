@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const User = mongoose.model("users");
 const { nanoid } = require("nanoid");
 const { isValidEmail } = require("../helpers/helper");
+const { sendVerificationMail } = require("../helpers/mailer");
 
 Router.post("/register", async (req, res, next) => {
   const { email } = req.body;
@@ -16,10 +17,15 @@ Router.post("/register", async (req, res, next) => {
   try {
     const foundUser = await User.findOne({ email });
     if (foundUser) {
+      try {
+        await sendVerificationMail(foundUser.key, email);
+      } catch (err) {
+        console.log(err);
+      }
       return res.json({
         status: "success",
         msg:
-          "Email ID is already registered with us. We have mailed the API Key on this email.",
+          "Email ID is already registered with us. We have mailed the API Key on this email. If you do not recieve the mail, kindly check in your Spam Folder.",
         user: foundUser,
         email,
       });
@@ -31,11 +37,13 @@ Router.post("/register", async (req, res, next) => {
           hitCount: 0,
         }).save();
         console.log(`From the DB: ${newUser}`);
+        await sendVerificationMail(newUser.key, email);
         return res.json({
           status: "success",
-          msg: "Registered, your API key is mailed to you",
+          msg: `Registered, here is your API Key, please save this for future references. A mail has also been sent to you with the Key. If you do not recieve the mail, please check in your Spam Folder.`,
           user: newUser,
           email,
+          key: newUser.key,
         });
       } catch (err) {
         console.log(err.message);

@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const rateLimit = require("express-rate-limit");
+require("dotenv").config();
 
 require("./models/Quotes");
 require("./models/Users");
