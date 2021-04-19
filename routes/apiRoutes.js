@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Quote = mongoose.model("quotes");
 const User = mongoose.model("users");
 
-// const seedData = require("../seedData");
+const seedData = require("../seedData");
 const { isEmpty } = require("../helpers/helper");
 const checkAPIKey = require("../middleware/checkAPIKey");
 
@@ -86,23 +86,23 @@ Router.get("/:key/quote/:id", checkAPIKey, async (req, res, next) => {
 //   }
 // });
 
-// Router.get("/seed", async (req, res, next) => {
-//   seedData.forEach(async ({ comic, quote, author }, index) => {
-//     try {
-//       let newQuote = await new Quote({
-//         comic,
-//         quote,
-//         quoteID: index,
-//         author,
-//       }).save();
-//       console.log(`From the DB: ${newQuote}`);
-//     } catch (err) {
-//       console.log(err.message);
-//       next(err);
-//     }
-//   });
-//   return res.json({ msg: "Seeding Data" });
-// });
+Router.get("/seed", async (req, res, next) => {
+  seedData.forEach(async ({ comic, quote, author }, index) => {
+    try {
+      let newQuote = await new Quote({
+        comic,
+        quote,
+        quoteID: index,
+        author,
+      }).save();
+      console.log(`From the DB: ${newQuote.quoteID}`);
+    } catch (err) {
+      console.log(err.message);
+      next(err);
+    }
+  });
+  return res.json({ msg: "Seeding Data" });
+});
 
 module.exports = Router;
 
